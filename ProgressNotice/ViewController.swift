@@ -25,7 +25,8 @@ class ViewController: UIViewController {
     
     lazy var ringView: ProgressAnimatedView = {
         let ringView = ProgressAnimatedView()
-        ringView.center = view.center
+        ringView.center = CGPoint(x: view.center.x,
+                                  y: view.center.y + 100)
         ringView.radius = 25
         ringView.strokeThickness = 3
         return ringView
@@ -39,6 +40,8 @@ class ViewController: UIViewController {
         indefiniteAnimatedView.strokeThickness = 3
         return indefiniteAnimatedView
     }()
+    
+    var num: String?
     
 //    lazy var indefiniteAnimatedView1:   = {
 //        let indefiniteAnimatedView = SVIndefiniteAnimatedView()
@@ -59,51 +62,63 @@ class ViewController: UIViewController {
         let path = imageBundle?.path(forResource: "angle-mask@3x", ofType: "png")
 
         let v = UIImageView(image: UIImage(contentsOfFile: path!))
-//        NSString *bundlePath = [[NSBundlemainBundle]pathForResource:@"SourcesBundle"ofType:@"bundle"];
-//
-//        NSBundle *resourceBundle = [NSBundlebundleWithPath:bundlePath];
-//        let bundlePath = Bundle.main.path(forResource: "ProgressNotice", ofType: "bundle")
-//        let resourceBundle = Bundle(path: bundlePath ?? "")
-//
-//        let path = resourceBundle?.path(forResource: "angle-mask", ofType: "png")
-//        let v = UIImageView(image: UIImage(contentsOfFile: path!))
-        // let v = UIImageView(image: UIImage(named: "ProgressNotice.bundle/angle-mask"))
-        v.center = view.center
+        /*
+        NSString *bundlePath = [[NSBundlemainBundle]pathForResource:@"SourcesBundle"ofType:@"bundle"];
+
+        NSBundle *resourceBundle = [NSBundlebundleWithPath:bundlePath];
+        let bundlePath = Bundle.main.path(forResource: "ProgressNotice", ofType: "bundle")
+        let resourceBundle = Bundle(path: bundlePath ?? "")
+
+        let path = resourceBundle?.path(forResource: "angle-mask", ofType: "png")
+        let v = UIImageView(image: UIImage(contentsOfFile: path!))
+        let v = UIImageView(image: UIImage(named: "ProgressNotice.bundle/angle-mask"))
+        */
+        v.center = CGPoint(x: view.center.x,
+                           y: view.center.y - 100)
         v.sizeToFit()
         return v
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.addSubview(backView)
-//        backView.layer.insertSublayer(backLayer, at: 0)
-//        backLayer.frame = view.frame
-//        backLayer.gradientCenter = view.center
-//        backLayer.setNeedsDisplay()
+        view.addSubview(backView)
+        backView.layer.insertSublayer(backLayer, at: 0)
+        backLayer.frame = view.frame
+        backLayer.gradientCenter = view.center
+        backLayer.setNeedsDisplay()
         
-//        view.addSubview(ringView)
-//
-//        var progress: CGFloat = 0
-//
-//        if #available(iOS 10.0, *) {
-//            let timer = Timer(timeInterval: 0.01, repeats: true, block: {[unowned self] timer in
-//                progress += 0.003
-//                self.ringView.strokeEnd = progress
-//                if progress >= 1 {
-//                    timer.invalidate()
-//                }
-//
-//            })
-//            RunLoop.current.add(timer, forMode: .commonModes)
-//        }
+        view.addSubview(ringView)
+
+        var progress: CGFloat = 0
+
+        if #available(iOS 10.0, *) {
+            let timer = Timer(timeInterval: 0.01, repeats: true, block: {[unowned self] timer in
+                progress += 0.001
+                self.ringView.strokeEnd = progress
+                if progress >= 1 {
+                    timer.invalidate()
+                }
+
+            })
+            RunLoop.current.add(timer, forMode: .commonModes)
+        }
+        
         view.addSubview(indefiniteAnimatedView)
 
         view.addSubview(imageView)
+        
+        num = "可选"
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
 
 
